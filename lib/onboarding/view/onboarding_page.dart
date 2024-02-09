@@ -1,17 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:second_hand_app/onboarding/view/widgets/login_page.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    void onClik(double direction) => Navigator.of(context).push(
+          PageRouteBuilder<dynamic>(
+            pageBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+            ) =>
+                const LoginPage(),
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: Offset(direction, 0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
+        );
+
     return Scaffold(
       body: GestureDetector(
         onHorizontalDragStart: (details) {
           details.localPosition.dx < MediaQuery.of(context).size.width / 2
-              ? print('Rejestracja')
-              : print('Logowanie');
+              ? onClik(-1)
+              : onClik(1);
         },
         child: Column(
           children: [
@@ -53,30 +81,25 @@ class OnBoardingPage extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: InkWell(
-                              onTap: () {
-                                print('Rejestracja');
-                              },
+                              onTap: () => onClik(-1),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('Rejestracja',
-                                      textScaler: TextScaler.linear(
-                                        MediaQuery.of(context).size.height /
-                                            (MediaQuery.of(context).size.width *
-                                                    0.4 -
-                                                20) /
-                                            6,
-                                      ),
-                                      style: GoogleFonts.syne(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 24,
-                                      )
-                                      // style: const TextStyle(
-                                      //   color: Colors.white,
-                                      //   fontSize: 24,
-                                      // ),
-                                      ),
+                                  Text(
+                                    'Rejestracja',
+                                    textScaler: TextScaler.linear(
+                                      MediaQuery.of(context).size.height /
+                                          (MediaQuery.of(context).size.width *
+                                                  0.4 -
+                                              20) /
+                                          6,
+                                    ),
+                                    style: GoogleFonts.syne(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 24,
+                                    ),
+                                  ),
                                   const SizedBox(
                                     height: 20,
                                   ),
@@ -113,9 +136,7 @@ class OnBoardingPage extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: InkWell(
-                              onTap: () {
-                                print('Logowanie');
-                              },
+                              onTap: () => onClik(1),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
