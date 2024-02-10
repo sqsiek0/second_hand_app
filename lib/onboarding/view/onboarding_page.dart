@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:second_hand_app/onboarding/view/widgets/login_page.dart';
+import 'package:second_hand_app/onboarding/view/widgets/register_page.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({super.key});
@@ -14,7 +15,7 @@ class OnBoardingPage extends StatelessWidget {
               animation,
               secondaryAnimation,
             ) =>
-                const LoginPage(),
+                direction == 1 ? const LoginPage() : const RegisterPage(),
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             transitionsBuilder: (
