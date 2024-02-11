@@ -19,6 +19,12 @@ class AppTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: isPassword,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Pole nie może być puste';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -36,6 +42,12 @@ class AppTextField extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
         fillColor: Colors.grey.shade200,
+        errorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: Colors.red,
+          ),
+          borderRadius: BorderRadius.circular(100),
+        ),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(100),

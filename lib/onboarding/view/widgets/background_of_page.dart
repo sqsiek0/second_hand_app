@@ -16,7 +16,7 @@ class BackgroundPage extends StatelessWidget {
             height: MediaQuery.of(context).size.width * 1.5,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(1000),
-              color: Colors.red.shade100,
+              color: Colors.blueGrey.shade100,
             ),
           ),
         ),
@@ -28,7 +28,7 @@ class BackgroundPage extends StatelessWidget {
             height: MediaQuery.of(context).size.width * 1.5,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(1000),
-              color: Colors.red.shade200,
+              color: Colors.blueGrey.shade300,
             ),
           ),
         ),
