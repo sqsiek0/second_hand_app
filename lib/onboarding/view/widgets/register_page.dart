@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:second_hand_app/app/view/widgets/app_textfield.dart';
 import 'package:second_hand_app/onboarding/view/widgets/background_of_page.dart';
 import 'package:second_hand_app/onboarding/view/widgets/login_or_register.dart';
+import 'package:second_hand_app/onboarding/view/widgets/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -104,6 +105,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             isLoginFirst: false,
                             onLogin: () {
                               Navigator.of(context).pop();
+                              Navigator.of(context).push(
+                                MaterialPageRoute<dynamic>(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
                             },
                             onRegister: () {
                               if (_formKey.currentState!.validate()) {}
