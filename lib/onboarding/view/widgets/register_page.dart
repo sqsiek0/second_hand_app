@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:second_hand_app/app/bloc/app_bloc.dart';
 import 'package:second_hand_app/app/view/widgets/app_textfield.dart';
 import 'package:second_hand_app/onboarding/view/widgets/background_of_page.dart';
 import 'package:second_hand_app/onboarding/view/widgets/login_or_register.dart';
@@ -103,8 +105,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           const SizedBox(height: 30),
                           LoginOrRegister(
                             isLoginFirst: false,
+                            isLoading: context.watch<AppBloc>().state.isLoading,
                             onLogin: () {
-                              Navigator.of(context).pop();
+                              Navigator.pop(context);
                               Navigator.of(context).push(
                                 MaterialPageRoute<dynamic>(
                                   builder: (context) => const LoginPage(),
@@ -112,7 +115,16 @@ class _RegisterPageState extends State<RegisterPage> {
                               );
                             },
                             onRegister: () {
-                              if (_formKey.currentState!.validate()) {}
+                              if (_formKey.currentState!.validate()) {
+                                context.read<AppBloc>().add(
+                                      AppRegisterUserEvent(
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                        onDone: () =>
+                                            Navigator.of(context).pop(),
+                                      ),
+                                    );
+                              }
                             },
                           ),
                         ],

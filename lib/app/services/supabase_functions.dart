@@ -14,8 +14,11 @@ class SupabaseFunctions {
     print(supabaseInstace.auth.currentSession);
   }
 
-  static Future<void> signIn(String email, String password) async {
-    // Your code here
+  Future<void> register({
+    required String email,
+    required String password,
+  }) async {
+    await supabaseInstace.auth.signUp(password: password, email: email);
   }
 
   Future<void> logOut() async {

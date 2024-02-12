@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:second_hand_app/app/bloc/app_bloc.dart';
-import 'package:second_hand_app/app/services/supabase_functions.dart';
 import 'package:second_hand_app/app/view/widgets/app_textfield.dart';
 import 'package:second_hand_app/onboarding/view/widgets/background_of_page.dart';
 import 'package:second_hand_app/onboarding/view/widgets/login_or_register.dart';
@@ -36,117 +35,109 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppBloc(
-        supabaseFunctions: SupabaseFunctions(),
-      ),
-      child: BlocBuilder<AppBloc, AppState>(
-        builder: (context, state) {
-          return Material(
-            child: BackgroundPage(
-              child: SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Witaj ponownie!',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.syne(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            'Zaloguj się na swoje konto i szukaj nowych perełek!',
-                            textAlign: TextAlign.left,
-                            style: GoogleFonts.syne(
-                              fontSize: 16,
-                              color: Colors.grey.shade800,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          const SizedBox(height: 60),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+    return Material(
+      child: BackgroundPage(
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Witaj ponownie!',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.syne(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Text(
+                      'Zaloguj się na swoje konto i szukaj nowych perełek!',
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.syne(
+                        fontSize: 16,
+                        color: Colors.grey.shade800,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 60),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Form(
+                          key: _formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          child: Column(
                             children: [
-                              Form(
-                                key: _formKey,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                child: Column(
-                                  children: [
-                                    AppTextField(
-                                      hintText: 'E-mail',
-                                      icon: const Icon(Icons.email_outlined),
-                                      controller: emailController,
-                                    ),
-                                    const SizedBox(height: 20),
-                                    AppTextField(
-                                      hintText: 'Hasło',
-                                      icon: const Icon(Icons.lock_outlined),
-                                      isPassword: true,
-                                      controller: passwordController,
-                                    ),
-                                  ],
-                                ),
+                              AppTextField(
+                                hintText: 'E-mail',
+                                icon: const Icon(Icons.email_outlined),
+                                controller: emailController,
                               ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              InkWell(
-                                onTap: () {},
-                                child: Text(
-                                  'Nie pamietasz hasła?',
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.syne(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 30),
-                              LoginOrRegister(
-                                isLoginFirst: true,
-                                onLogin: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    context.read<AppBloc>().add(
-                                          AppLoginUserEvent(
-                                            email: emailController.text,
-                                            password: passwordController.text,
-                                          ),
-                                        );
-                                  }
-                                },
-                                onRegister: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute<dynamic>(
-                                      builder: (context) =>
-                                          const RegisterPage(),
-                                    ),
-                                  );
-                                },
+                              const SizedBox(height: 20),
+                              AppTextField(
+                                hintText: 'Hasło',
+                                icon: const Icon(Icons.lock_outlined),
+                                isPassword: true,
+                                controller: passwordController,
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Text(
+                            'Nie pamietasz hasła?',
+                            textAlign: TextAlign.left,
+                            style: GoogleFonts.syne(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        LoginOrRegister(
+                          isLoginFirst: true,
+                          isLoading: context.watch<AppBloc>().state.isLoading,
+                          onLogin: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AppBloc>().add(
+                                    AppLoginUserEvent(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      onDone: () => Navigator.of(context).pop(),
+                                    ),
+                                  );
+                            }
+                          },
+                          onRegister: () {
+                            Navigator.pop(context);
+                            Navigator.of(context).push(
+                              MaterialPageRoute<dynamic>(
+                                builder: (context) => const RegisterPage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

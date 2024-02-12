@@ -7,10 +7,12 @@ class LoginOrRegister extends StatelessWidget {
     super.key,
     this.onLogin,
     this.onRegister,
+    this.isLoading = false,
   });
   final VoidCallback? onLogin;
   final VoidCallback? onRegister;
   final bool isLoginFirst;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -18,23 +20,26 @@ class LoginOrRegister extends StatelessWidget {
       children: [
         InkWell(
           onTap: isLoginFirst ? onLogin : onRegister,
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: Colors.black,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20,
+          child: Opacity(
+            opacity: isLoading ? 0.5 : 1.0,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: Colors.black,
               ),
-              child: Text(
-                isLoginFirst ? 'Zaloguj się' : 'Zarejestruj się',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.syne(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                ),
+                child: Text(
+                  isLoginFirst ? 'Zaloguj się' : 'Zarejestruj się',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.syne(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
@@ -72,24 +77,27 @@ class LoginOrRegister extends StatelessWidget {
         const SizedBox(height: 10),
         InkWell(
           onTap: isLoginFirst ? onRegister : onLogin,
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: Colors.grey.shade200,
-              border: Border.all(),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20,
+          child: Opacity(
+            opacity: isLoading ? 0.5 : 1.0,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: Colors.grey.shade200,
+                border: Border.all(),
               ),
-              child: Text(
-                isLoginFirst ? 'Zarejestruj się' : 'Zaloguj się',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.syne(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                ),
+                child: Text(
+                  isLoginFirst ? 'Zarejestruj się' : 'Zaloguj się',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.syne(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

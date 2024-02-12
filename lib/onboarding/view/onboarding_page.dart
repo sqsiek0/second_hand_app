@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:second_hand_app/app/bloc/app_bloc.dart';
 import 'package:second_hand_app/onboarding/view/widgets/login_page.dart';
 import 'package:second_hand_app/onboarding/view/widgets/register_page.dart';
 
@@ -11,11 +13,19 @@ class OnBoardingPage extends StatelessWidget {
     void onClik(double direction) => Navigator.of(context).push(
           PageRouteBuilder<dynamic>(
             pageBuilder: (
-              context,
+              _,
               animation,
               secondaryAnimation,
             ) =>
-                direction == 1 ? const LoginPage() : const RegisterPage(),
+                direction == 1
+                    ? BlocProvider.value(
+                        value: context.read<AppBloc>(),
+                        child: const LoginPage(),
+                      )
+                    : BlocProvider.value(
+                        value: context.read<AppBloc>(),
+                        child: const RegisterPage(),
+                      ),
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             transitionsBuilder: (
