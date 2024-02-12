@@ -30,4 +30,6 @@ class AppRegisterUserEvent extends AppEvent {
   });
 }
 
+class AppResetError extends AppEvent {}
+
 class AppLogoutUserEvent extends AppEvent {}

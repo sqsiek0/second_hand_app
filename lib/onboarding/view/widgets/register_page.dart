@@ -41,6 +41,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentState = context.watch<AppBloc>().state;
+
     return Material(
       child: BackgroundPage(
         child: SafeArea(
@@ -102,15 +104,34 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: 'Powtórz hasło',
                             icon: const Icon(Icons.lock_outlined),
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 20),
+                          if (currentState.errorMessage.isNotEmpty)
+                            Align(
+                              child: Text(
+                                currentState.errorMessage,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.syne(
+                                  fontSize: 14,
+                                  color: Colors.red.shade700,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           LoginOrRegister(
                             isLoginFirst: false,
-                            isLoading: context.watch<AppBloc>().state.isLoading,
+                            isLoading: currentState.isLoading,
                             onLogin: () {
                               Navigator.pop(context);
+                              context.read<AppBloc>().add(AppResetError());
                               Navigator.of(context).push(
                                 MaterialPageRoute<dynamic>(
-                                  builder: (context) => const LoginPage(),
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<AppBloc>(),
+                                    child: const LoginPage(),
+                                  ),
                                 ),
                               );
                             },

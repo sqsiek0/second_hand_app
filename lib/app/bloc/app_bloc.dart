@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:second_hand_app/app/constants/enum/enums.dart';
 import 'package:second_hand_app/app/services/supabase_functions.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
@@ -12,12 +13,13 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.supabaseFunctions,
-  }) : super(AppState(isLoading: false)) {
+  }) : super(AppState(isLoading: false, errorMessage: '')) {
     on<AppEvent>((event, emit) {});
     on<AppCheckSesion>(_checkSesion);
     on<AppLoginUserEvent>(_loginUser);
     on<AppRegisterUserEvent>(_registerUser);
     on<AppLogoutUserEvent>(_logoutUser);
+    on<AppResetError>(_resetError);
   }
   final SupabaseFunctions supabaseFunctions;
 
@@ -41,20 +43,33 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   ) async {
     try {
       emit(state.copyWith(isLoading: true));
-      await supabaseFunctions
-          .logIn(
-            email: event.email,
-            password: event.password,
-          )
-          .then((value) => event.onDone.call());
+      await supabaseFunctions.logIn(
+        email: event.email,
+        password: event.password,
+      );
+
       emit(
         state.copyWith(
           appState: AppStateEnum.autorized,
           isLoading: false,
+          errorMessage: '',
+        ),
+      );
+      event.onDone.call();
+    } on AuthException catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.message,
+          isLoading: false,
         ),
       );
     } catch (e) {
-      print(e.toString());
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          isLoading: false,
+        ),
+      );
     }
   }
 
@@ -64,19 +79,33 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   ) async {
     try {
       emit(state.copyWith(isLoading: true));
-      await supabaseFunctions
-          .register(
-            email: event.email,
-            password: event.password,
-          )
-          .then((value) => event.onDone.call());
+      await supabaseFunctions.register(
+        email: event.email,
+        password: event.password,
+      );
       emit(
         state.copyWith(
           appState: AppStateEnum.autorized,
           isLoading: false,
+          errorMessage: '',
         ),
       );
-    } catch (e) {}
+      event.onDone.call();
+    } on AuthException catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.message,
+          isLoading: false,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          isLoading: false,
+        ),
+      );
+    }
   }
 
   Future<void> _logoutUser(
@@ -87,5 +116,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       await supabaseFunctions.logOut();
       emit(state.copyWith(appState: AppStateEnum.unautorized));
     } catch (e) {}
+  }
+
+  void _resetError(
+    AppResetError event,
+    Emitter<AppState> emit,
+  ) {
+    emit(state.copyWith(errorMessage: ''));
   }
 }
