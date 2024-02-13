@@ -30,6 +30,12 @@ class AppRegisterUserEvent extends AppEvent {
   });
 }
 
+class AppResetPassword extends AppEvent {
+  final String email;
+
+  AppResetPassword({required this.email});
+}
+
 class AppResetError extends AppEvent {}
 
 class AppLogoutUserEvent extends AppEvent {}

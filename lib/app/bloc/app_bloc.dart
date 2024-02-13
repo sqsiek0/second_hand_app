@@ -19,6 +19,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppLoginUserEvent>(_loginUser);
     on<AppRegisterUserEvent>(_registerUser);
     on<AppLogoutUserEvent>(_logoutUser);
+    on<AppResetPassword>(_resetPassword);
     on<AppResetError>(_resetError);
   }
   final SupabaseFunctions supabaseFunctions;
@@ -116,6 +117,36 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       await supabaseFunctions.logOut();
       emit(state.copyWith(appState: AppStateEnum.unautorized));
     } catch (e) {}
+  }
+
+  Future<void> _resetPassword(
+    AppResetPassword event,
+    Emitter<AppState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      await supabaseFunctions.resetPassword(email: event.email);
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: '',
+        ),
+      );
+    } on AuthException catch (e) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: e.message,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
   }
 
   void _resetError(

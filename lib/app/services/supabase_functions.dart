@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseFunctions {
@@ -25,8 +26,14 @@ class SupabaseFunctions {
     await supabaseInstace.auth.signOut();
   }
 
-  static Future<void> resetPassword(String email) async {
-    // Your code here
+  Future<void> resetPassword({required String email}) async {
+    await supabaseInstace.auth.resetPasswordForEmail(
+      email,
+      // redirectTo: 'https://ffftdygzvcrzvmgqrgvq.supabase.co',
+      redirectTo:
+          kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
+    );
+    print('Reset password email sent to $email');
   }
 
   Future<void> refreshToken() async {

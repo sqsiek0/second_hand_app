@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:second_hand_app/app/bloc/app_bloc.dart';
 import 'package:second_hand_app/app/view/widgets/app_textfield.dart';
 import 'package:second_hand_app/onboarding/view/widgets/background_of_page.dart';
+import 'package:second_hand_app/onboarding/view/widgets/login_forget_password.dart';
 import 'package:second_hand_app/onboarding/view/widgets/login_or_register.dart';
 import 'package:second_hand_app/onboarding/view/widgets/register_page.dart';
 
@@ -97,7 +98,32 @@ class _LoginPageState extends State<LoginPage> {
                           height: 5,
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            // Navigator.pop(context);
+                            // Navigator.of(context, rootNavigator: true).push(
+                            //   MaterialPageRoute<dynamic>(
+                            //     builder: (_) => const LoginForgetPassword(),
+                            //   ),
+                            // );
+                            showModalBottomSheet<dynamic>(
+                              context: context,
+                              isScrollControlled: true,
+                              useSafeArea: true,
+                              constraints: BoxConstraints(
+                                minHeight: MediaQuery.of(context).size.height,
+                              ),
+                              builder: (_) => ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                                child: BlocProvider.value(
+                                  value: context.read<AppBloc>(),
+                                  child: const LoginForgetPassword(),
+                                ),
+                              ),
+                            );
+                          },
                           child: Text(
                             'Nie pamietasz hasła?',
                             textAlign: TextAlign.left,
