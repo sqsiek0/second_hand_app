@@ -13,7 +13,11 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.supabaseFunctions,
-  }) : super(AppState(isLoading: false, errorMessage: '')) {
+  }) : super(AppState(
+          isLoading: false,
+          errorMessage: '',
+          isMailSent: false,
+        )) {
     on<AppEvent>((event, emit) {});
     on<AppCheckSesion>(_checkSesion);
     on<AppLoginUserEvent>(_loginUser);
@@ -129,6 +133,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(
         state.copyWith(
           isLoading: false,
+          isMailSent: true,
           errorMessage: '',
         ),
       );
@@ -136,6 +141,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(
         state.copyWith(
           isLoading: false,
+          isMailSent: false,
           errorMessage: e.message,
         ),
       );
@@ -143,6 +149,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(
         state.copyWith(
           isLoading: false,
+          isMailSent: false,
           errorMessage: e.toString(),
         ),
       );
