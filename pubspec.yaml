@@ -10,7 +10,7 @@ dependencies:
   bloc: ^8.1.2
   google_fonts: any
   supabase_flutter: ^2.3.3
-  supabase: ^2.0.7
+  supabase: ^2.0.8
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
